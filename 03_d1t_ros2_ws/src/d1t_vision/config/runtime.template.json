@@ -1,0 +1,39 @@
+{
+  "schema": "d1t_vision.runtime.v1",
+  "session_id": "",
+  "device_id": "",
+  "mount_id": "",
+  "board_fixed_evidence": "",
+  "joint_source_evidence": "",
+  "joint_state_publisher_node": "",
+  "optical_frame": "",
+  "image_geometry": "raw",
+  "topics": {"color": "", "depth": "", "color_info": "", "depth_info": "", "joint_state": ""},
+  "fk_service": "",
+  "output_directory": "",
+  "clock": {"same_ros_clock_verified": false, "evidence": ""},
+  "stamp_semantics": {
+    "color": "", "depth": "", "color_info": "", "depth_info": "",
+    "joint_state": "joint_state_bridge publishes reception-time ROS stamps, NOT encoder hardware acquisition time"
+  },
+  "depth": {"encoding": "", "scale_m": null, "scale_evidence": "", "min_m": null, "max_m": null},
+  "pairing_policy": {
+    "max_age_ms": 1000.0,
+    "max_camera_skew_ms": 30.0,
+    "max_joint_skew_ms": 150.0,
+    "max_joint_gap_ms": 250.0,
+    "stationary_window_ms": 600.0,
+    "stationary_tolerance_rad": 0.01
+  },
+  "fk_timeout_s": 3.0,
+  "max_reprojection_rms_px": 1.0,
+  "board": {
+    "kind": "charuco", "dictionary": "DICT_4X4_50",
+    "squares_x": 5, "squares_y": 5,
+    "square_length_m": null, "marker_length_m": null,
+    "nominal_square_length_m": null, "print_scale": null,
+    "origin": "outer_top_left_x_right_y_down_z_cross",
+    "legacy_pattern": true, "measured": false,
+    "board_id": "", "measurement_note": ""
+  }
+}

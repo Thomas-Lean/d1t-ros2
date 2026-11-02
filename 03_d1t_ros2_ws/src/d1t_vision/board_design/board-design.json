@@ -1,0 +1,15 @@
+{
+  "kind": "charuco",
+  "dictionary": "DICT_4X4_50",
+  "squares_x": 5,
+  "squares_y": 5,
+  "square_length_m": 0.03,
+  "marker_length_m": 0.022,
+  "nominal_square_length_m": 0.03,
+  "print_scale": 1.0,
+  "origin": "outer_top_left_x_right_y_down_z_cross",
+  "legacy_pattern": true,
+  "measured": false,
+  "board_id": "DESIGN_EXAMPLE_NOT_MEASURED",
+  "measurement_note": "Unprinted 150 x 150 mm design, not physical measurement. Print at 100 percent and measure before real capture."
+}

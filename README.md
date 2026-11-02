@@ -16,8 +16,9 @@
 | 网页示教器 | 浏览器里关节 / 笛卡尔点动、夹爪、上下电、刚度、预设点位 |
 | 夹爪判定 | 按夹爪停在哪判断空夹 / 夹到 / 不确定 / 没动（没有力传感） |
 | 假控制器 | `fake_d1t` 扮演机械臂，不接实机也能跑通整条链路 |
+| 视觉标定（参考实现） | RealSense 眼在手上：采样、手眼求解、像素→`base_link` 换算；附开发记录与实测数据，见 `03_d1t_ros2_ws/src/d1t_vision/README.md` |
 
-已在一台 D1-T 上实机使用过：关节运动、MoveIt 执行、示教器、固定位置取放。**没有做成通用的视觉定位抓取**，不要把本仓库当成即插即用的抓取方案。
+已在一台 D1-T 上实机使用过：关节运动、MoveIt 执行、示教器、固定位置取放。**没有做成通用的视觉定位抓取**（视觉部分停在标定与受限测试阶段，原因见 `d1t_vision/README.md`），不要把本仓库当成即插即用的抓取方案。
 
 ## 2. 仓库结构
 
@@ -31,13 +32,13 @@
 ├── 03_d1t_ros2_ws/
 │   ├── d1t_env.bash           实机环境入口（域 0、直连网卡）
 │   ├── d1t_env_sim.bash       仿真环境入口（域 7、loopback）
-│   └── src/                   8 个 ROS2 包
+│   └── src/                   9 个 ROS2 包
 └── manifest/OPERATIONS.md     操作手册：节点、参数、话题、服务、底层协议、排障
 ```
 
 `manifest/OPERATIONS.md` 原是项目内部手册，文中引用的 `START_HERE.md`、`forlearning/` 等内部文档**不在本仓库**；手册里的命令、参数、协议表仍然有效。
 
-### 2.1 八个 ROS2 包
+### 2.1 九个 ROS2 包
 
 | 包 | 作用 |
 |---|---|
@@ -49,6 +50,7 @@
 | `d1t_moveit_config` | MoveIt 配置、碰撞体脚本、工具坐标与抓取场景工具 |
 | `d1t_sim` | `fake_d1t`：假控制器 |
 | `d1t_teach` | 网页示教器 `teach_server` |
+| `d1t_vision` | 眼在手上视觉标定参考实现（离线求解 + 只读采样 / 坐标换算节点），开发记录见包内 README |
 
 ## 3. 关于这台臂，先知道这些（实测）
 
@@ -156,7 +158,7 @@ export D1T_IFACE=<你的网卡名>
 cd 03_d1t_ros2_ws && source /opt/ros/humble/setup.bash && colcon build
 ```
 
-预期最后是 `Summary: 8 packages finished`。部分包向 stderr 打信息属正常。不要混用 `--symlink-install`；改代码后重新 build，并在新终端重新 source。
+预期最后是 `Summary: 9 packages finished`。部分包向 stderr 打信息属正常。不要混用 `--symlink-install`；改代码后重新 build，并在新终端重新 source。
 
 ## 5. 不接机械臂：仿真跑通
 

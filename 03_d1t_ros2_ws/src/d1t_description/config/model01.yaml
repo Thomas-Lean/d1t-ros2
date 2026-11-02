@@ -1,0 +1,54 @@
+# Dimensions in mm; angles in rad. Raw reports are never solver tolerances.
+status: DRAFT
+reported:
+  bottle_diameter: 56.5
+  bottle_height: 180.0
+  grip_diameter: 56.0
+  grip_h: 108.0
+  rack_width: 380.0
+  rack_depth: 200.0
+  rack_height: 155.0
+  upper_bottom: 125.0
+  lower_bottom: 20.0
+  slot_width: 102.0
+  slot_depth: 24.5
+  plate_thickness: 3.0
+  edge_thickness: 4.9
+  post_diameter: 5.0
+  post_exposed: 86.0
+  post_dx: 205.0
+  post_dy: 160.0
+  post_front_x: 87.0
+  post_front_y: 23.0
+  socket_diameter: 12.5
+  socket_visible: 10.0
+draft:
+  # Equal pitch repeats the ONE measured slot; it is not a measured slot layout.
+  upper_centers: [88.0, 190.0, 292.0]
+  lower_centers: [37.0, 139.0, 241.0, 343.0]
+  lower_slot_depth: 24.5
+  profile: cosine
+  edge_band: 5.0
+  selected_slot: 2
+  bottle_bottom_y: 160.0
+  bottle_offset_x: 0.0
+  bottle_pitch: 0.0
+  bottle_yaw: 0.0
+  tool_roll: 0.0
+  # Physical 60.8 mm opening comes from the historical hand measurement, not URDF q=0.
+  open_gap: 60.8
+  backstop_gap: 1.0
+  approach_distance: 80.0
+  lift_distance: 80.0
+  front_exit_distance: 220.0
+sampling:
+  profile_step: 0.5
+  cylinder_segments: 256
+  path_step: 2.0
+  closing_step: 0.25
+  contact_tolerance: 0.02
+sources:
+  reported: inputs/PREPARATION-20260920.md (Thomas reports, 2026-09-20; precision unverified)
+  structure: IMG_1603.JPG, IMG_1607.JPG, IMG_1611.JPG; upper 3/lower 4 confirmed by Thomas
+  draft: Developer hypotheses; all numeric perturbations are sensitivity probes, NOT measured tolerances
+  open_gap: START_HERE section 2.1, historical ruler reading 60.8 mm (2026-09-17); applicability unverified

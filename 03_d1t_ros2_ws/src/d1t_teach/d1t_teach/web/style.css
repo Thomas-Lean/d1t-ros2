@@ -1,0 +1,68 @@
+:root { color-scheme: light dark; --edge: #8884; }
+* { box-sizing: border-box; }
+body { font-family: system-ui, "Noto Sans CJK SC", sans-serif; margin: 0 auto; padding: 8px 12px;
+       max-width: 1180px; line-height: 1.45; font-size: 14px; }
+
+/* 常驻条 */
+#bar { position: sticky; top: 0; z-index: 5; padding: 6px 0 8px;
+       border-bottom: 2px solid var(--edge); background: Canvas; }
+.bar-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 3px 0; }
+.grow { flex: 1 1 auto; }
+.sep { width: 1px; height: 22px; background: var(--edge); margin: 0 6px; }
+.lbl { font-weight: 600; }
+.hint { color: #888; font-size: 12px; }
+.mono { font-family: ui-monospace, Menlo, Consolas, monospace; }
+.chip { background: #8883; border-radius: 10px; padding: 1px 9px; font-weight: 600;
+        white-space: nowrap; }
+.chip.ok { background: #1d6b2f; color: #fff; }
+.chip.busy { background: #8a5a00; color: #fff; }
+.chip.bad { background: #b00020; color: #fff; }
+.warn-chip { background: #b00020; color: #fff; cursor: help; }
+
+/* 夹爪刻度条：命令值一条竖线，反馈一段填充，下面是 raw 刻度 */
+.gauge { position: relative; width: 240px; height: 30px; border: 1px solid var(--edge);
+         border-radius: 3px; overflow: hidden; background: #8881; }
+.gauge-fill { position: absolute; left: 0; top: 0; height: 16px; background: #1d6b2f88; }
+.gauge-mark { position: absolute; top: 0; width: 2px; height: 16px; background: #b00020; }
+.gauge-ticks { position: absolute; left: 0; right: 0; bottom: 0; height: 14px; }
+.gauge-ticks i { position: absolute; bottom: 0; width: 1px; height: 5px; background: #888; }
+.gauge-ticks b { position: absolute; bottom: 4px; transform: translateX(-50%);
+                 font-size: 9px; color: #888; font-weight: 400; }
+
+/* 标签页 */
+#tabs { display: flex; gap: 4px; margin: 8px 0; border-bottom: 1px solid var(--edge); }
+#tabs button { border: 1px solid var(--edge); border-bottom: none; border-radius: 5px 5px 0 0;
+               padding: 6px 16px; background: #8881; cursor: pointer; font-size: 14px; }
+#tabs button.on { background: #1d6b2f; color: #fff; border-color: #1d6b2f; }
+
+section { padding: 4px 0 10px; }
+.row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 6px 0; }
+button { padding: 4px 10px; border-radius: 4px; border: 1px solid #8886; background: #8881;
+         cursor: pointer; font-size: 14px; }
+button:disabled { opacity: .35; cursor: not-allowed; }
+button.on { background: #1d6b2f; color: #fff; border-color: #1d6b2f; }
+/* 数字输入框用 type=text + inputmode=decimal（type=number 在中间态会吞小数点），
+   所以这里按 .abs / #gv-open / #gv-close 选，不按 type 选 */
+input.abs, input.gv { width: 78px; padding: 3px;
+  font-family: ui-monospace, Menlo, Consolas, monospace; text-align: right; }
+input.gv { width: 56px; }
+input[type=range] { accent-color: #1d6b2f; }
+
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid var(--edge); padding: 3px 6px; text-align: right; white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+td.now { font-family: ui-monospace, monospace; font-weight: 700; font-size: 15px; }
+td.near { background: #8a5a0055; }
+td.slider { width: 42%; }
+td.slider input { width: 100%; }
+
+/* 笛卡尔表：和关节表同一种读法——一行一个轴，左边名字、中间读数、右边点动 */
+#cart td:first-child { font-weight: 600; }
+#cart .sub { margin-left: 6px; font-weight: 400; opacity: .6; font-size: 12px; }
+#cart td.unit, #cart td.stp { opacity: .7; }
+#cart td.jog { text-align: center; }
+#cart td.jog button { min-width: 44px; margin: 0 3px; font-size: 16px; }
+
+#log div { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; }
+#log div.fail, #log div.reject { color: #d33; }
+#log div.warn { color: #c80; }

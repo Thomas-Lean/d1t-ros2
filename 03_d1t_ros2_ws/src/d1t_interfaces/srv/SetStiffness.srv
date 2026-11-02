@@ -1,0 +1,22 @@
+# 由 d1t_arm 的 arm_driver 提供（/set_stiffness）。发一帧 funcode=5 全关节刚度命令，测刚度档位。
+#
+#   mode < 0 或 mode > 1000 → reason='out_of_range'，不发。2026-09-11 实测盖棺：有效量程
+#                          就是 0~1000（0~1000 之间手感有梯度，1000 以上含 65536/80000
+#                          全部饱和），官方文档「0~80000」在实机上不成立。mode 最终塞进
+#                          uint16 字段，超界还会静默回绕（80000→14464），造出「enable_status
+#                          =1 但舵机全松」的假使能状态，因此在到达控制器之前就拒绝。
+#   mode < 1000          → 视同卸力（低于 enable_status 真判据 mode>=1000，控制器不认为在保持）。
+#                          走与 /set_servo enable=false 同一道折叠区检查：不在折叠区 →
+#                          reason='not_folded' 拒绝（在展开姿态卸力会砸下来）。
+#   mode >= 1000         → 「带力命令」：打 WARN，不拦，但阻尼只加阻力、不朝任何目标驱动，
+#                          满档（1000）也撑不住自重——不能用来保持位置，只能当阻力挡位测。
+#
+# 服务保留作诊断用；与 /move_to_joints goal 互斥（reason='busy'）。
+
+int32 mode            # funcode=5 刚度档位；0=卸力，有效量程 0~1000，越界拒绝
+---
+bool success
+int32 applied_mode
+bool enabled          # 发送后读到的 enable_status（控制器 mode>=1000 才置 1；即便置 1 也
+                      # 只是软件标志，不代表机械臂能靠它保持位置）
+string reason         # ok / out_of_range / not_folded / not_ready / busy

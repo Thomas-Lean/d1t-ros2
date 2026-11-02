@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- cyclonedds_sim.xml — 仅供 fake_d1t 仿真使用的 loopback DDS 配置。
+     用途：与实机隔离测试。enp5s0 未连线（down）时 cyclonedds.xml 无法建链，
+     本文件把 DDS 限制在 127.0.0.1，关闭组播，改用 localhost 单播发现。
+     切换：export CYCLONEDDS_URI=file://<仓库根>/cyclonedds_sim.xml
+     必须同时改 domain（如 export ROS_DOMAIN_ID=7），不要用它跑实机。 -->
+<CycloneDDS xmlns="https://cdds.io/config"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="https://cdds.io/config https://raw.githubusercontent.com/eclipse-cyclonedds/cyclonedds/master/etc/cyclonedds.xsd">
+  <Domain id="any">
+    <General>
+      <!-- lo 不支持组播，只能按地址指定并走单播发现 -->
+      <Interfaces>
+        <NetworkInterface address="127.0.0.1"/>
+      </Interfaces>
+      <AllowMulticast>false</AllowMulticast>
+      <MaxMessageSize>65500B</MaxMessageSize>
+    </General>
+    <Discovery>
+      <ParticipantIndex>auto</ParticipantIndex>
+      <MaxAutoParticipantIndex>50</MaxAutoParticipantIndex>
+      <Peers>
+        <Peer address="localhost"/>
+      </Peers>
+    </Discovery>
+    <Tracing>
+      <Verbosity>warning</Verbosity>
+      <OutputFile>stdout</OutputFile>
+    </Tracing>
+  </Domain>
+</CycloneDDS>

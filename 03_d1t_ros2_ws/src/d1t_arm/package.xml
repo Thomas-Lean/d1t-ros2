@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>d1t_arm</name>
+  <version>0.0.1</version>
+  <description>Resident MoveToJoints action driver for D1-T: seven-axis goal -> /arm_Command, arrival judged from joint feedback. Also hosts trajectory_server (FollowJointTrajectory for MoveIt). Mainline resident node; the ros2_control route was dropped (2026-09-11).</description>
+  <maintainer email="173587389+Thomas-Lean@users.noreply.github.com">Thomas</maintainer>
+  <license>Apache-2.0</license>
+
+  <depend>rclpy</depend>
+  <depend>rcl_interfaces</depend>
+  <depend>unitree_arm</depend>
+  <depend>d1t_interfaces</depend>
+  <depend>control_msgs</depend>
+  <depend>trajectory_msgs</depend>
+  <depend>action_msgs</depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

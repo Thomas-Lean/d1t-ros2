@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D1-T 手动控制（TEACH-01）</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- 常驻条：四个标签页都看得见。状态、速度、夹爪、伺服。 -->
+<header id="bar">
+  <div class="bar-row">
+    <span id="st" class="chip">连接中</span>
+    <span id="fb" class="chip mono">—</span>
+    <span id="scene" class="chip">场景 —</span>
+    <button id="clr-ext" hidden
+            title="确认没有别人在动臂（也没在拖示教）之后点它，解除锁定继续用。">解除外部运动</button>
+    <span class="grow"></span>
+    <span class="chip warn-chip"
+          title="cancel、Ctrl-C、停止发布都不是急停。唯一能立即停的是断电。">无急停 · 断电才停</span>
+  </div>
+
+  <div class="bar-row">
+    <span class="lbl">速度</span>
+    <input type="range" id="spd" min="0.01" max="1.00" step="0.01">
+    <span id="spd-v" class="chip mono">—</span>
+    <span class="lbl">加速度</span>
+    <input type="range" id="acc" min="0.01" max="1.00" step="0.01">
+    <span id="acc-v" class="chip mono">—</span>
+
+    <span class="sep"></span>
+
+    <span class="lbl">夹爪</span>
+    <button id="g-open">开</button>
+    <input type="text" inputmode="decimal" id="gv-open" class="gv"
+           title="「开」按钮发的目标值（raw）。改完回车或点别处即存进预设文件。">
+    <button id="g-close">关</button>
+    <input type="text" inputmode="decimal" id="gv-close" class="gv"
+           title="「关」按钮发的目标值（raw）。改完回车或点别处即存进预设文件。">
+    <div class="gauge" id="gauge">
+      <div class="gauge-fill" id="g-fill"></div>
+      <div class="gauge-mark" id="g-target"></div>
+      <div class="gauge-ticks" id="g-ticks"></div>
+    </div>
+    <span id="g-txt" class="chip mono">—</span>
+
+    <span class="sep"></span>
+
+    <button id="hold-mode" title="开：按住按钮不放就连续走，松开停发。这条通路不经 MoveIt、不做任何碰撞检查。">按住即走：关</button>
+
+    <span class="sep"></span>
+
+    <span class="lbl">刚度</span>
+    <input type="range" id="stf" min="0" max="1000" step="50">
+    <span id="stf-v" class="chip mono">—</span>
+    <button id="stf-go" title="发一帧 funcode=5 全关节刚度命令。只加阻力、不驱动，满档也撑不住自重。">下发</button>
+
+    <span class="sep"></span>
+
+    <span class="lbl">伺服</span>
+    <button id="sv-on">上电</button>
+    <button id="sv-off">下电</button>
+    <span id="sv-txt" class="chip mono">—</span>
+  </div>
+</header>
+
+<nav id="tabs">
+  <button data-tab="joint" class="on">关节</button>
+  <button data-tab="cart">笛卡尔</button>
+  <button data-tab="preset">预设点位</button>
+  <button data-tab="log">事件</button>
+</nav>
+
+<main>
+  <section id="tab-joint">
+    <div class="row">
+      <span class="lbl">点动步长</span><span id="jstep"></span>
+      <span class="hint">一步 1° 小于 arm_driver 的到位带 2.0°，实走 0.4~1.3°</span>
+    </div>
+    <table id="joints"><thead><tr>
+      <th>轴</th><th>当前 °</th><th>位置（拖动松手即执行）</th>
+      <th>距下限</th><th>距上限</th><th>点动</th><th>绝对角 °</th>
+    </tr></thead><tbody></tbody></table>
+  </section>
+
+  <section id="tab-cart" hidden>
+    <div class="row"><span class="lbl">TCP</span><span id="tcp-btns"></span></div>
+    <div class="row"><span class="lbl">增量参考系</span><span id="frame-btns"></span>
+      <span class="hint" id="frame-hint"></span></div>
+    <div class="row"><span class="lbl">位置步长 mm</span><span id="pstep"></span></div>
+    <div class="row"><span class="lbl">姿态步长 °</span><span id="rstep"></span></div>
+    <table id="cart"><thead><tr>
+      <th>轴</th><th id="cart-h-now">当前值</th><th>单位</th><th>点动</th><th>步长</th>
+    </tr></thead><tbody></tbody></table>
+    <div id="cart-err" class="hint"></div>
+  </section>
+
+  <section id="tab-preset" hidden>
+    <div id="presets"></div>
+    <div id="preset-path" class="hint"></div>
+  </section>
+
+  <section id="tab-log" hidden>
+    <div id="log"></div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

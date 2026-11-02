@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>d1t_sim</name>
+  <version>0.0.1</version>
+  <description>fake_d1t: D1-T controller protocol simulator on /arm_Command and /arm_Feedback.</description>
+  <maintainer email="173587389+Thomas-Lean@users.noreply.github.com">Thomas</maintainer>
+  <license>Apache-2.0</license>
+
+  <depend>rclpy</depend>
+  <depend>unitree_arm</depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

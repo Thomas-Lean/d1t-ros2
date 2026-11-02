@@ -1,0 +1,35 @@
+# 控制器与执行监控。
+#
+# action 名字拼接规则（已用 moveit2 humble 分支源码核实，见报告）：
+# MoveItSimpleControllerManager::getActionName() 在 action_ns 非空时返回
+# "<name>/<action_ns>"，为空时直接返回 "<name>"。这里把 action_ns 留空、
+# controller 名直接写 follow_joint_trajectory，得到相对名 "follow_joint_trajectory"，
+# move_group 不带命名空间运行时解析成全局 /follow_joint_trajectory ——
+# 正好是 trajectory_server 已经提供的那个 action，不改 trajectory_server 一行代码。
+moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControllerManager
+
+moveit_simple_controller_manager:
+  controller_names:
+    - follow_joint_trajectory
+  follow_joint_trajectory:
+    type: FollowJointTrajectory
+    action_ns: ""
+    default: true
+    joints:
+      - Joint1
+      - Joint2
+      - Joint3
+      - Joint4
+      - Joint5
+      - Joint6
+
+# trajectory_server 逐点等到位、每点固定约 0.33s 开销，跟 MoveIt 按限位算出的
+# 时间参数化轨迹时长（AddTimeOptimalParameterization）没有对应关系——执行时长监控
+# 会拿"计划时长×scaling+margin"去比对真实用时，真实用时系统性更长，会被误判超时
+# 取消（任务书坑 3）。参数名 trajectory_execution.execution_duration_monitoring
+# 已用 strings 核对 libmoveit_trajectory_execution_manager.so 确认存在，关掉即可
+# ——我们的执行器不是标准 ros2_control 控制器，没有"按时间轴插值"的概念，
+# 到位判据由 arm_driver 自己的 tolerance/timeout 把关（见 trajectory_server.py
+# 裁定 6），这里再监控一层时长纯属误报源。
+trajectory_execution:
+  execution_duration_monitoring: false

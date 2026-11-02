@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>d1t_teach</name>
+  <version>0.0.1</version>
+  <description>TEACH-01 web manual control panel for D1-T: joint jog, cartesian jog, gripper, TCP选择, override, presets and servo buttons. Backend is one rclpy node with a stdlib http.server; frontend is plain static files (no npm, no new system dependency).</description>
+  <maintainer email="173587389+Thomas-Lean@users.noreply.github.com">Thomas</maintainer>
+  <license>Apache-2.0</license>
+
+  <depend>rclpy</depend>
+  <depend>rcl_interfaces</depend>
+  <depend>action_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>moveit_msgs</depend>
+  <depend>d1t_interfaces</depend>
+  <depend>d1t_arm</depend>
+  <depend>unitree_arm</depend>
+  <depend>ament_index_python</depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

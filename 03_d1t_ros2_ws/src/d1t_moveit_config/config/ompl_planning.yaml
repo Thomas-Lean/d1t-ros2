@@ -1,0 +1,30 @@
+# OMPL 规划配置。Pilz 本阶段不配（任务书裁定）。
+#
+# start_state_max_bounds_error：与官方默认（moveit_configs_utils/default_configs/
+# ompl_planning.yaml）一致，未调大。任务书坑 1（a1/Joint2 在 HOME 读数越界）实测
+# 越界量 ≤0.5°=0.0087rad，默认 0.1rad（5.7°）本身已覆盖 10 倍以上余量，
+# FixStartStateBounds 这个 request adapter（下面 request_adapters 列表里已含）会把
+# 这点越界直接钳回限位内、不拒绝规划请求，不需要再放宽。
+planning_plugin: ompl_interface/OMPLPlanner
+start_state_max_bounds_error: 0.1
+jiggle_fraction: 0.05
+request_adapters: >-
+    default_planner_request_adapters/AddTimeOptimalParameterization
+    default_planner_request_adapters/ResolveConstraintFrames
+    default_planner_request_adapters/FixWorkspaceBounds
+    default_planner_request_adapters/FixStartStateBounds
+    default_planner_request_adapters/FixStartStateCollision
+    default_planner_request_adapters/FixStartStatePathConstraints
+
+# 只给 arm 组挂 RRTConnect：joint-space 点到点够用，未验证其它 planner 在此臂上的
+# 表现，先收窄到一个能跑通的最小配置。
+arm:
+  planner_configs:
+    - RRTConnect
+  projection_evaluator: joints(Joint1,Joint2)
+  # 0.005 -> 0.001（S4b-3 主窗口裁定 3b8db6d 授权修改）。这是「两次碰撞检查之间的最大间隔 /
+  # 关节空间总跨度」的比例。主窗口推算（未实测）：六轴限位合计约 9.7 rad，0.005 约每 2.8° 查
+  # 一次、指尖 0.5 m 处约 24 mm，与 30 mm 碰撞余量同量级；碰撞盒外扩后缝变窄，中间点漏检，
+  # 规划出的路在最后校验被打回（INVALID_MOTION_PLAN，仿真 15 次真绕行失败 5 次）。
+  # 0.001 约 0.56°、指尖约 5 mm。代价是规划更慢，耗时变化见 S4b-3 报告。
+  longest_valid_segment_fraction: 0.001

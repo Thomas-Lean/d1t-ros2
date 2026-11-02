@@ -1,0 +1,18 @@
+# 由 d1t_arm 的 arm_driver 提供（/grip，GRIP-01）。只发夹爪一条 funcode=1（jid=6），不碰臂轴；
+# 与 /move_to_joints goal、/set_servo、/set_stiffness 互斥（有别的在跑直接 reason='busy'）。
+# 发命令 → 等 recv → 等夹爪停稳（1 s 内极差 <= 0.25°、>= 5 帧）→ 用「停住值 - 目标」判定。
+# 判定只靠位置反馈，阈值只在娃哈哈瓶身、目标 29~33 上有实测支撑（见 grip_detect.py 文件头）。
+
+float64 target_deg          # 夹爪 angle6 目标，只许 [20, 50]，越界 reason='out_of_range'、不发命令
+float64 speed_ratio 0.3     # 与 /move_to_joints 默认一致
+float64 timeout_sec 0.0     # 从发命令起等停稳的上限；<=0 用节点参数 grip_timeout_sec（默认 10 s）
+---
+bool success                # true = reason 为 ok 且 state 为 empty 或 grasped（判定可信）
+string state                # empty（没被挡：空夹 / 张开到位）/ grasped（被物体挡住）/
+                            # uncertain（误差落在两阈值之间）/ not_moved（命令行程 >= 2° 却没离开起点）/
+                            # ''（reason 不是 ok 时）
+string reason               # ok / out_of_range / busy / not_ready / no_recv / rejected_recv /
+                            # not_settled / no_feedback
+float64 start_raw           # 发命令前最近一帧 angle6_raw
+float64 settled_raw         # 停住值（窗口中位数）；not_settled 时是最后窗口中位数；无数据为 NaN
+float64 err_deg             # settled_raw - target_deg

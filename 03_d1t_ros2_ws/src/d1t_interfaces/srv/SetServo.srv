@@ -1,0 +1,22 @@
+# 由 d1t_arm 的 arm_driver 提供（/set_servo）。复用其常驻 /arm_Command 发布者，不新建节点。
+# enable=true ：先读一帧新鲜反馈；读数超实测硬件行程 = 传感器异常 → reason='out_of_limits'。
+#   再按折叠区（a1≈-90 & a2≈89，±15°）分两支：
+#     折叠区内 → 主动规划回精确 HOME [0,-90,89,0,0,0,0]（位移小，安全；夹爪 a6 也送到 0）；
+#     折叠区外 → 零位移 funcode=1 原地使能（只 6 根臂轴，不碰夹爪；下发目标 clamp 到控制器
+#       限位）。clamp 偏差 > 2° 只告警不拒绝（2026-09-23 起）：照发，上电瞬间机械臂会突跳这么多，
+#       reason='ok_clamped_X.Xdeg' 报出突跳量。任意远处直线插值回 HOME 有碰撞风险，所以折叠区外
+#       不做那个运动，只原地。
+#   两支都是等 enable_status 变 1 后成功，日志打印当前位置（可直接粘进 send_goal）。
+# enable=false：折叠区内直接发 funcode=5 mode=0 卸力；折叠区外不再拒绝（2026-09-23 起）：先发
+#   mode=1000 阻尼档、等 2.0 s 让机械臂带阻尼下坠，再发 mode=0 卸力——机械臂一定会跌落，下方必须
+#   清空。两种情况都等 0.5 s 读 enable_status，不主动运动。仿真 fake_d1t 不认 funcode=5，必回
+#   move_failed。
+#
+# 字段名 enable（不是 on）：YAML 1.1 把 on/off/yes/no 当布尔，{on: true} 被解析成 {True: true}。
+
+bool enable          # true=上伺服（折叠区内回精确 HOME，折叠区外原地）；false=下伺服（折叠区外先阻尼再卸力，会跌落）
+---
+bool success
+bool enabled         # 操作后读到的 enable_status（1=已使能）
+float64[7] final_deg # 操作结束时最近一帧关节反馈 angle0~5 + angle6_raw
+string reason        # ok / ok_clamped_X.Xdeg / already / timeout / move_failed / out_of_limits / not_ready / busy

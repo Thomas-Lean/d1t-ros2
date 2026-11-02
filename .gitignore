@@ -1,0 +1,22 @@
+# ROS2 colcon 产物（03 层）
+build/
+install/
+log/
+
+# D1_SDK 自己的构建产物（02 层，目录名不一样，得单独写）
+build_ubox/
+
+# VS Code 缓存（两层 .vscode 都有，且这就是那个 1.2G 元凶）
+browse.vc.db
+browse.vc.db.lock
+.vscode/
+
+# macOS/通用
+.DS_Store
+core.*
+.cache/
+.claude/worktrees/
+
+# Python 字节码
+__pycache__/
+*.pyc

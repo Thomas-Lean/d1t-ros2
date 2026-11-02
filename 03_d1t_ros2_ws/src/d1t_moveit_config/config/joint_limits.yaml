@@ -1,0 +1,34 @@
+# 速度：照抄 URDF <limit velocity="…">（J1~J3=1.05 rad/s=60.2°/s，J4~J6=1.73 rad/s=99.1°/s）。
+# 加速度：六轴统一 1.25 rad/s²，任务书裁定值 = 控制器 maxalpha 71.62°/s² 换算
+# （71.62 × π/180 = 1.2501 rad/s²，源码 marm_controller_node.cpp 实测值，见 START_HERE.md）。
+joint_limits:
+  Joint1:
+    has_velocity_limits: true
+    max_velocity: 1.05
+    has_acceleration_limits: true
+    max_acceleration: 1.25
+  Joint2:
+    has_velocity_limits: true
+    max_velocity: 1.05
+    has_acceleration_limits: true
+    max_acceleration: 1.25
+  Joint3:
+    has_velocity_limits: true
+    max_velocity: 1.05
+    has_acceleration_limits: true
+    max_acceleration: 1.25
+  Joint4:
+    has_velocity_limits: true
+    max_velocity: 1.73
+    has_acceleration_limits: true
+    max_acceleration: 1.25
+  Joint5:
+    has_velocity_limits: true
+    max_velocity: 1.73
+    has_acceleration_limits: true
+    max_acceleration: 1.25
+  Joint6:
+    has_velocity_limits: true
+    max_velocity: 1.73
+    has_acceleration_limits: true
+    max_acceleration: 1.25

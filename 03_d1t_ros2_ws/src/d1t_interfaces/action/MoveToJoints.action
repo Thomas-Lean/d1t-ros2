@@ -1,0 +1,28 @@
+# goal
+float64[7] target_deg
+float64 timeout_sec          # 0 表示用节点默认
+float64 speed_ratio 0.3       # 0~1，各轴最大角速度百分比
+float64 accel_ratio 1.0       # 0~1，最大角加速度百分比
+                              # 两个倍率都只影响总时长，都不传加减速形状——形状由控制器
+                              # 收到 delay_ms 后自行重算
+float64 duration_sec 0.0      # >0 时直接用这个时长，忽略 speed_ratio/accel_ratio 对时长
+                              # 的影响（但调用方仍须传 speed_ratio=1.0，否则 plan() 算出
+                              # 的硬件最短时间地板不对，见 trajectory_server.speed_ratio_
+                              # for_segment）；比硬件最快还快会被拉长并置 speed_limited；
+                              # override 仍叠加（S4a-1，FollowJointTrajectory 逐段调用时
+                              # 按段时长传入）
+---
+# result
+bool arrived
+float64[7] final_deg
+string reason                 # arrived / no_recv / arrival_timeout / rejected_recv / canceled / out_of_limits / not_ready
+float64 actual_duration_sec   # 规划出的总时长 T
+bool speed_limited            # speed_ratio/accel_ratio/override 被 clamp、或 delay_ms 撞 32767 上限时 true
+string executed_path          # funcode1_planner / none
+float64[7] target_clamp_deg   # 三层限位：目标超 CTRL_LIMIT 时每轴的截断量（下发值 - 目标值），无截断为 0
+bool target_clamped           # 任一轴被截断则为 true；超 HW_LIMIT 时直接 out_of_limits，不会走到这里
+---
+# feedback
+float64[7] current_deg
+float64 max_err_deg
+string phase                  # sending / waiting_recv / moving

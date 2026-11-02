@@ -1,0 +1,46 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+  - Class: rviz_common/Views
+    Name: Views
+Visualization Manager:
+  Class: ""
+  Global Options:
+    Background Color: 35; 40; 48
+    Fixed Frame: rack_frame
+    Frame Rate: 30
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Name: Table plane
+      Enabled: true
+      Cell Size: 0.05
+      Plane Cell Count: 20
+      Color: 95; 105; 118
+      Reference Frame: rack_frame
+    - Class: rviz_default_plugins/MarkerArray
+      Name: MODEL-01 DRAFT - rack and existing hand
+      Enabled: true
+      Topic:
+        Value: /model01/markers
+        Reliability Policy: Reliable
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Depth: 1
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Name: Current View
+      Target Frame: rack_frame
+      Distance: 0.78
+      Pitch: 0.42
+      Yaw: 5.2
+      Focal Point:
+        X: 0.19
+        Y: 0.09
+        Z: 0.13
+      Near Clip Distance: 0.005
+Window Geometry:
+  Width: 1400
+  Height: 900
+  X: 40
+  Y: 40

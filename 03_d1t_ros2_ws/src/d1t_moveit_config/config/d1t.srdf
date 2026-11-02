@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<!--
+d1t.srdf — S4b-0 手写，未用 Setup Assistant。robot name 必须与 URDF <robot name> 一致
+（START_HERE.md「S4b 前置」条：URDF 仍是 d1_550_description，本阶段裁定不改 URDF，SRDF 跟着它写）。
+
+规划组 arm：base_link -> tcp_link，Joint1..Joint6（S4b-4：末端由 Empty_Link6 改到 URDF 新增的
+固定 link tcp_link = 夹持中心，位姿目标与笛卡尔直线都以它为末端；关节不变。裁定：不建夹爪规划组，夹爪是夹持
+指令不是位置指令，见 trajectory_server.py 顶部注释、S4a-1 阶段裁定）。
+
+碰撞矩阵：先关掉全部物理相邻连杆对（Adjacent），home 状态是否还有其它自碰交由
+V1 阶段用 /check_state_validity 服务实测确认，若发现额外碰撞对在此文件追加、并在
+报告里注明真因（而不是不加区分地关闭一大片）。
+-->
+<robot name="d1_550_description">
+  <group name="arm">
+    <chain base_link="base_link" tip_link="tcp_link"/>
+  </group>
+
+  <!-- home：URDF 坐标系下 [0,-90,89,0,0,0] 度 -> 弧度。与 fake_d1t 的 initial_angles
+       默认值 [0,-90.4,89.6,-0.3,8.9,-0.3,49.8] 只差不到 1°，是同一个折叠停放姿态。
+       Joint3（=控制器轴 a2）2026-09-23 从 90 改成 89：TEACH-01 任务把 a2 正限位
+       放宽到 Thomas 实测行程时定的上界是 89（不是对称猜测值 90），90° 现在已经
+       超出新 URDF 上界（d1t_description/urdf/d1t.urdf Joint3 upper=1.5568≈89.2°），
+       跟 d1t_arm.arm_driver.HOME_DEG、d1t_teach.presets 的「折叠姿态」预设同步改，
+       理由都写在那两处。 -->
+  <group_state name="home" group="arm">
+    <joint name="Joint1" value="0"/>
+    <joint name="Joint2" value="-1.5708"/>
+    <joint name="Joint3" value="1.55334"/>
+    <joint name="Joint4" value="0"/>
+    <joint name="Joint5" value="0"/>
+    <joint name="Joint6" value="0"/>
+  </group_state>
+
+  <disable_collisions link1="base_link" link2="Empty_Link1" reason="Adjacent"/>
+  <disable_collisions link1="Empty_Link1" link2="Empty_Link2" reason="Adjacent"/>
+  <disable_collisions link1="Empty_Link2" link2="Empty_Link3" reason="Adjacent"/>
+  <disable_collisions link1="Empty_Link3" link2="Empty_Link4" reason="Adjacent"/>
+  <disable_collisions link1="Empty_Link4" link2="Empty_Link5" reason="Adjacent"/>
+  <disable_collisions link1="Empty_Link5" link2="Empty_Link6" reason="Adjacent"/>
+  <disable_collisions link1="Empty_Link6" link2="Empty_Link_L" reason="Adjacent"/>
+  <disable_collisions link1="Empty_Link6" link2="Empty_Link_R" reason="Adjacent"/>
+</robot>

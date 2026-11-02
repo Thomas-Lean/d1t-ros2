@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>unitree_arm</name>
+  <version>0.0.1</version>
+  <description>D1-T DDS-compatible ROS 2 interface definitions.</description>
+  <maintainer email="thomas@example.com">Thomas</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>rosidl_default_generators</buildtool_depend>
+  <exec_depend>rosidl_default_runtime</exec_depend>
+
+  <member_of_group>rosidl_interface_packages</member_of_group>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

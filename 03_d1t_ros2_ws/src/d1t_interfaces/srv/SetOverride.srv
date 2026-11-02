@@ -1,0 +1,8 @@
+# 由 d1t_arm 的 arm_driver 提供（/set_override）。全局速度倍率，节点级状态，不随 goal 走，
+# 对应示教器上的倍率旋钮；仅对 use_planner=true 的 goal 生效（funcode=2 无时间参数）。
+# 手动 jog 时可随时调用，不受 /move_to_joints goal 门控。
+
+float64 ratio          # 0~1；越界按 [0.01, 1.0] clamp
+---
+bool success
+float64 applied_ratio  # clamp 后实际生效值
